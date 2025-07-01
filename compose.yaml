@@ -1,0 +1,32 @@
+﻿services:
+  budgetperserving:
+    build:
+      context: .
+      dockerfile: budgetperserving/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__BudgetPerServingDb=Host=db;Port=5432;Database=budget_db;Username=budget_user;Password=budget_pass
+    depends_on:
+      db:
+        condition: service_healthy  
+  db:
+    image: postgres:16
+    container_name: budget_per_serving_db
+    ports:
+      - "5000:5432"
+    environment:
+      POSTGRES_USER: budget_user
+      POSTGRES_PASSWORD: budget_pass
+      POSTGRES_DB: budget_db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U budget_user -d budget_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
