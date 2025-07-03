@@ -24,7 +24,7 @@ namespace BudgetPerServing.Controllers
         [HttpGet("search")]
         public async Task<ActionResult<FoodApiResponse>> SearchFoodsAsync()
         {
-            var query = HttpContext.Request.Query["query"].ToString();
+            var query = HttpContext.Request.Query;
             var response = await fdcClient.SearchFoodsAsync(query);
             return Ok(response);
         }
