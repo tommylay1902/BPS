@@ -129,10 +129,10 @@ public class FoodItem
     public List<object> Microbes { get; set; } = new();
     */
 
-    /*[JsonPropertyName("foodNutrients")]
-    public List<FoodNutrient> FoodNutrients { get; set; } = new();*/
+    [JsonPropertyName("foodNutrients")]
+    public List<FoodNutrient> FoodNutrients { get; set; } = new();
 
-    [JsonPropertyName("finalFoodInputFoods")]
+    /*[JsonPropertyName("finalFoodInputFoods")]
     public List<object> FinalFoodInputFoods { get; set; } = new();
 
     [JsonPropertyName("foodMeasures")]
@@ -145,7 +145,7 @@ public class FoodItem
     public List<object> FoodAttributeTypes { get; set; } = new();
 
     [JsonPropertyName("foodVersionIds")]
-    public List<object> FoodVersionIds { get; set; } = new();
+    public List<object> FoodVersionIds { get; set; } = new();*/
 }
 
 public class FoodNutrient
@@ -162,35 +162,35 @@ public class FoodNutrient
     [JsonPropertyName("unitName")]
     public string UnitName { get; set; } = string.Empty;
 
-    [JsonPropertyName("derivationCode")]
-    public string DerivationCode { get; set; } = string.Empty;
+    /*[JsonPropertyName("derivationCode")]
+    public string DerivationCode { get; set; } = string.Empty;*/
 
     [JsonPropertyName("derivationDescription")]
     public string DerivationDescription { get; set; } = string.Empty;
 
-    [JsonPropertyName("derivationId")]
-    public int DerivationId { get; set; }
+    /*[JsonPropertyName("derivationId")]
+    public int DerivationId { get; set; }*/
 
     [JsonPropertyName("value")]
     public double Value { get; set; }
 
-    [JsonPropertyName("foodNutrientSourceId")]
+    /*[JsonPropertyName("foodNutrientSourceId")]
     public int FoodNutrientSourceId { get; set; }
 
     [JsonPropertyName("foodNutrientSourceCode")]
-    public string FoodNutrientSourceCode { get; set; } = string.Empty;
+    public string FoodNutrientSourceCode { get; set; } = string.Empty;*/
 
-    [JsonPropertyName("foodNutrientSourceDescription")]
-    public string FoodNutrientSourceDescription { get; set; } = string.Empty;
+    /*[JsonPropertyName("foodNutrientSourceDescription")]
+    public string FoodNutrientSourceDescription { get; set; } = string.Empty;*/
 
-    [JsonPropertyName("rank")]
+    /*[JsonPropertyName("rank")]
     public int Rank { get; set; }
 
     [JsonPropertyName("indentLevel")]
     public int IndentLevel { get; set; }
 
     [JsonPropertyName("foodNutrientId")]
-    public int FoodNutrientId { get; set; }
+    public int FoodNutrientId { get; set; }*/
 
     [JsonPropertyName("percentDailyValue")]
     public int? PercentDailyValue { get; set; }

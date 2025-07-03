@@ -1,5 +1,6 @@
 using BudgetPerServing.DAO;
 using BudgetPerServing.Data;
+using BudgetPerServing.Data.Clients;
 using BudgetPerServing.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,22 +13,20 @@ public interface IFoodItemService
     public Task CreateFoodItemAsync(FoodItem foodItem);
 }
 
-public class FoodItemService(IFoodItemDao foodItemDao) : IFoodItemService
+public class FoodItemService() : IFoodItemService
 {
-    public async Task<IEnumerable<FoodItem>> GetFoodItemsAsync()
+    public Task<IEnumerable<FoodItem>> GetFoodItemsAsync()
     {
-        return await foodItemDao.GetFoodItemsAsync();
+        throw new NotImplementedException();
     }
 
-    public async Task<FoodItem?> GetFoodItemAsync(Guid id)
+    public Task<FoodItem?> GetFoodItemAsync(Guid id)
     {
-        var foodItem = await foodItemDao.GetFoodItemAsync(id);
-        
-        return foodItem;
+        throw new NotImplementedException();
     }
 
-    public async Task CreateFoodItemAsync(FoodItem foodItem)
+    public Task CreateFoodItemAsync(FoodItem foodItem)
     {
-        await foodItemDao.CreateFoodItemAsync(foodItem);
+        throw new NotImplementedException();
     }
 }

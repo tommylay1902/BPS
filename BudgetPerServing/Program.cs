@@ -27,7 +27,7 @@ builder.Services.AddHttpClient<IFdcClient, FdcClient>(client =>
     client.BaseAddress = new Uri("https://api.nal.usda.gov/fdc/v1/foods/");
 });
 // add dao layer services
-builder.Services.AddScoped<IFoodItemDao, FoodItemDao>();
+/*builder.Services.AddScoped<IFoodItemDao, FoodItemDao>();*/
 
 //add logging for docker containers
 builder.Logging.ClearProviders();

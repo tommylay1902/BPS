@@ -1,10 +1,11 @@
 using BudgetPerServing.Data;
+using BudgetPerServing.Data.Clients;
 using BudgetPerServing.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BudgetPerServing.DAO;
 
-public interface IFoodItemDao
+/*public interface IFoodItemDao
 {
     public Task<IEnumerable<FoodItem>> GetFoodItemsAsync();
     public Task<FoodItem?> GetFoodItemAsync(Guid id);
@@ -28,4 +29,4 @@ public class FoodItemDao(ApplicationDbContext context) : IFoodItemDao
         context.FoodItems.Add(foodItem);
         await context.SaveChangesAsync();
     }
-}
+}*/

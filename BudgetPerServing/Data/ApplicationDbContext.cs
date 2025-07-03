@@ -16,6 +16,5 @@ public class ApplicationDbContext: DbContext
         optionsBuilder.UseSqlServer();
     }*/
     
-    public DbSet<FoodItem> FoodItems { get; set; }
     public DbSet<ServingLog> ServingLogs { get; set; }
 }

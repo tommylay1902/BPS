@@ -3,8 +3,6 @@ using BudgetPerServing.Clients;
 using BudgetPerServing.Data.Clients;
 using Microsoft.AspNetCore.Mvc;
 using BudgetPerServing.Services;
-using NuGet.Protocol;
-using FoodItem = BudgetPerServing.Data.Models.FoodItem;
 
 namespace BudgetPerServing.Controllers
 {
@@ -14,12 +12,12 @@ namespace BudgetPerServing.Controllers
     {
      
         // GET: api/FoodItem
-        [HttpGet]
+        /*[HttpGet]
         public async Task<ActionResult<IEnumerable<FoodItem>>> GetFoodItems()
         {
         
             return Ok(await fiService.GetFoodItemsAsync());
-        }
+        }*/
 
         [HttpGet("search")]
         public async Task<ActionResult<FoodApiResponse>> SearchFoodsAsync()
@@ -30,7 +28,7 @@ namespace BudgetPerServing.Controllers
         }
         
         // GET: api/FoodItem/5
-        [HttpGet("{id}")]
+        /*[HttpGet("{id}")]
         public async Task<ActionResult<FoodItem?>> GetFoodItem(Guid id)
         {
             var foodItem = await fiService.GetFoodItemAsync(id);
@@ -41,18 +39,18 @@ namespace BudgetPerServing.Controllers
             }
 
             return foodItem;
-        }
+        }*/
 
 
         // POST: api/FoodItem
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        /*[HttpPost]
         public async Task<ActionResult<FoodItem>> PostFoodItem(FoodItem foodItem)
         {
             await fiService.CreateFoodItemAsync(foodItem);
 
             return CreatedAtAction("GetFoodItems", new { id = foodItem.Id });
-        }
+        }*/
 
 
         // GET: api/FoodItem/5
