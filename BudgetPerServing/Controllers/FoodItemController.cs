@@ -1,6 +1,7 @@
 
 using BudgetPerServing.Clients;
 using BudgetPerServing.Data.Clients;
+using BudgetPerServing.Services;
 using Microsoft.AspNetCore.Mvc;
 
 using FoodItem = BudgetPerServing.Data.Models.FoodItem;
@@ -9,7 +10,7 @@ namespace BudgetPerServing.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FoodItemController( IFdcClient fdcClient, ILogger<FoodItemController> logger) : ControllerBase
+    public class FoodItemController( IFdcClient fdcClient, ILogger<FoodItemController> logger, IFoodItemService fiService) : ControllerBase
     {
      
         // GET: api/FoodItem
@@ -36,17 +37,17 @@ namespace BudgetPerServing.Controllers
 
             return Ok(response);
         }
-
-
+        
         // POST: api/FoodItem
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        /*[HttpPost]
+        [HttpPost]
         public async Task<ActionResult<FoodItem>> PostFoodItem(FoodItem foodItem)
         {
             await fiService.CreateFoodItemAsync(foodItem);
 
             return CreatedAtAction("GetFoodItems", new { id = foodItem.Id });
-        }*/
+        }
+
 
 
         // GET: api/FoodItem/5
@@ -117,3 +118,4 @@ namespace BudgetPerServing.Controllers
         }*/
     }
 }
+

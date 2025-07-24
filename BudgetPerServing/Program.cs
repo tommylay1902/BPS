@@ -1,5 +1,7 @@
 using BudgetPerServing.Clients;
+using BudgetPerServing.DAO;
 using BudgetPerServing.Data;
+using BudgetPerServing.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,7 +18,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(optionsBuilder =>
 });
 
 // add service layer services
-/*builder.Services.AddScoped<IFoodItemService, FoodItemService>();*/
+builder.Services.AddScoped<IFoodItemService, FoodItemService>();
+builder.Services.AddScoped<ILocationService, LocationService>();
 
 builder.Services.AddScoped<IFdcClient, FdcClient>();
 builder.Services.AddHttpClient<IFdcClient, FdcClient>(client =>
@@ -24,7 +27,8 @@ builder.Services.AddHttpClient<IFdcClient, FdcClient>(client =>
     client.BaseAddress = new Uri("https://api.nal.usda.gov/fdc/v1/");
 });
 // add dao layer services
-/*builder.Services.AddScoped<IFoodItemDao, FoodItemDao>(); */
+builder.Services.AddScoped<IFoodItemDao, FoodItemDao>(); 
+builder.Services.AddScoped<ILocationDao, LocationDao>();
 
 //add logging for docker containers
 builder.Logging.ClearProviders();
