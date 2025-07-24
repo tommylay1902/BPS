@@ -45,7 +45,7 @@ namespace BudgetPerServing.Controllers
         {
             await fiService.CreateFoodItemAsync(foodItem);
 
-            return CreatedAtAction("GetFoodItems", new { id = foodItem.Id });
+            return CreatedAtAction("GetFoodItem", new { id = foodItem.Id });
         }
 
 

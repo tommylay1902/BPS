@@ -10,7 +10,6 @@ public class Store
     public Guid Id { get; set; }
     [StringLength(200)]
     public required string Name { get; set; }
-    
     public Guid LocationId{get;set;}
     public required Location Location { get; set; }
 }
