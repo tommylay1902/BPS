@@ -2,27 +2,26 @@
 using BudgetPerServing.Clients;
 using BudgetPerServing.Data.Clients;
 using Microsoft.AspNetCore.Mvc;
-using BudgetPerServing.Services;
-using NuGet.Protocol;
+
 using FoodItem = BudgetPerServing.Data.Models.FoodItem;
 
 namespace BudgetPerServing.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FoodItemController(IFoodItemService fiService, IFdcClient fdcClient, ILogger<FoodItemController> logger) : ControllerBase
+    public class FoodItemController( IFdcClient fdcClient, ILogger<FoodItemController> logger) : ControllerBase
     {
      
         // GET: api/FoodItem
-        [HttpGet]
+        /*[HttpGet]
         public async Task<ActionResult<IEnumerable<FoodItem>>> GetFoodItems()
         {
         
             return Ok(await fiService.GetFoodItemsAsync());
-        }
+        }*/
 
         [HttpGet("search")]
-        public async Task<ActionResult<FoodApiResponse>> SearchFoodsAsync()
+        public async Task<ActionResult<FoodSearchApiResponse>> SearchFoodsAsync()
         {
             var query = HttpContext.Request.Query["query"].ToString();
             var response = await fdcClient.SearchFoodsAsync(query);
@@ -30,29 +29,24 @@ namespace BudgetPerServing.Controllers
         }
         
         // GET: api/FoodItem/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<FoodItem?>> GetFoodItem(Guid id)
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<FoodGetByIdApiResponse>> GetFoodItem(int id)
         {
-            var foodItem = await fiService.GetFoodItemAsync(id);
+            var response = await fdcClient.GetFoodByIdAsync(id);
 
-            if (foodItem == null)
-            {
-                return NotFound();
-            }
-
-            return foodItem;
+            return Ok(response);
         }
 
 
         // POST: api/FoodItem
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        /*[HttpPost]
         public async Task<ActionResult<FoodItem>> PostFoodItem(FoodItem foodItem)
         {
             await fiService.CreateFoodItemAsync(foodItem);
 
             return CreatedAtAction("GetFoodItems", new { id = foodItem.Id });
-        }
+        }*/
 
 
         // GET: api/FoodItem/5

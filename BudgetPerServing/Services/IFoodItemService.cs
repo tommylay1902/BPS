@@ -1,4 +1,4 @@
-using BudgetPerServing.DAO;
+/*using BudgetPerServing.DAO;
 using BudgetPerServing.Data;
 using BudgetPerServing.Data.Models;
 using Microsoft.EntityFrameworkCore;
@@ -30,4 +30,4 @@ public class FoodItemService(IFoodItemDao foodItemDao) : IFoodItemService
     {
         await foodItemDao.CreateFoodItemAsync(foodItem);
     }
-}
+}*/

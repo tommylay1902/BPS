@@ -2,7 +2,7 @@
   budgetperserving:
     build:
       context: .
-      dockerfile: budgetperserving/Dockerfile
+      dockerfile: BudgetPerServing/Dockerfile
     ports:
       - "8080:8080"
     environment:
@@ -11,7 +11,7 @@
     depends_on:
       db:
         condition: service_healthy  
-  db:
+  db: 
     image: postgres:16
     container_name: budget_per_serving_db
     ports:
@@ -30,3 +30,4 @@
 
 volumes:
   postgres_data:
+

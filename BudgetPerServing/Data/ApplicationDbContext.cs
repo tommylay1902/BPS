@@ -9,13 +9,8 @@ public class ApplicationDbContext: DbContext
     {
         
     }
-
-    /*
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlServer();
-    }*/
-    
-    public DbSet<FoodItem> FoodItems { get; set; }
+    public DbSet<UserFoodItem> UserFoodItems { get; set; }
+    public DbSet<Store> Stores { get; set; }
+    public DbSet<Location> Locations { get; set; }
     public DbSet<ServingLog> ServingLogs { get; set; }
 }

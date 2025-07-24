@@ -2,8 +2,8 @@
 services:
   budgetperserving:
     build:
-      context: "C:\\Users\\MY PC\\RiderProjects\\BudgetPerServing"
-      dockerfile: "budgetperserving/Dockerfile"
+      context: "/home/tommy/dev/projects/BPS"
+      dockerfile: "BudgetPerServing/Dockerfile"
       target: "base"
     command: []
     entrypoint:
@@ -14,8 +14,8 @@ services:
     image: "budgetperserving:dev"
     ports: []
     volumes:
-    - "C:\\Users\\MY PC\\RiderProjects\\BudgetPerServing\\BudgetPerServing:/app:rw"
-    - "C:\\Users\\MY PC\\RiderProjects\\BudgetPerServing:/src:rw"
-    - "C:\\Users\\MY PC\\AppData\\Roaming\\Microsoft\\UserSecrets:/home/app/.microsoft/usersecrets"
-    - "C:\\Users\\MY PC\\.nuget\\packages:/home/app/.nuget/packages"
+    - "/home/tommy/dev/projects/BPS/BudgetPerServing:/app:rw"
+    - "/home/tommy/dev/projects/BPS:/src:rw"
+    - "/home/tommy/.microsoft/usersecrets:/home/app/.microsoft/usersecrets"
+    - "/home/tommy/.nuget/packages:/home/app/.nuget/packages"
     working_dir: "/app"

@@ -1,17 +1,14 @@
 using BudgetPerServing.Clients;
-using BudgetPerServing.DAO;
 using BudgetPerServing.Data;
-using BudgetPerServing.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 var foodApiKey = builder.Configuration["FoodApi:FoodApiKey"];
 
-// Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+;
 
 builder.Services.AddDbContext<ApplicationDbContext>(optionsBuilder =>
 {
@@ -19,25 +16,28 @@ builder.Services.AddDbContext<ApplicationDbContext>(optionsBuilder =>
 });
 
 // add service layer services
-builder.Services.AddScoped<IFoodItemService, FoodItemService>();
+/*builder.Services.AddScoped<IFoodItemService, FoodItemService>();*/
 
 builder.Services.AddScoped<IFdcClient, FdcClient>();
 builder.Services.AddHttpClient<IFdcClient, FdcClient>(client =>
 {
-    client.BaseAddress = new Uri("https://api.nal.usda.gov/fdc/v1/foods/");
+    client.BaseAddress = new Uri("https://api.nal.usda.gov/fdc/v1/");
 });
 // add dao layer services
-builder.Services.AddScoped<IFoodItemDao, FoodItemDao>();
+/*builder.Services.AddScoped<IFoodItemDao, FoodItemDao>(); */
 
 //add logging for docker containers
 builder.Logging.ClearProviders();
-builder.Logging.AddConsole(); 
+builder.Logging.AddConsole();
 var app = builder.Build();
+
+var logger = app.Logger;
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    logger.LogInformation("Development environment detected. OpenAPI documentation is enabled.");
 }
 
 app.UseHttpsRedirection();
