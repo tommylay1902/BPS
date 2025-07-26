@@ -29,9 +29,4 @@
       </Content>
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Areas\" />
-      <Folder Include="Data\DTOs\" />
-    </ItemGroup>
-
 </Project>

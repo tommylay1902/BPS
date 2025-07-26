@@ -1,5 +1,6 @@
 using BudgetPerServing.Data;
 using BudgetPerServing.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BudgetPerServing.DAO;
 
@@ -17,10 +18,16 @@ public class LocationDao (ApplicationDbContext context): ILocationDao
         var location = await context.Locations.FindAsync(id);
         return location;
     }
+
+    public async Task<IList<Location>?> GetAllLocationsAsync()
+    {
+        return  await context.Locations.ToListAsync();
+    }
 }
 
 public interface ILocationDao
 {
     Task CreateLocationAsync(Location location);
     Task<Location?> GetLocationByIdAsync(Guid id);
+    Task<IList<Location>?> GetAllLocationsAsync();
 }

@@ -14,7 +14,7 @@ public class FoodItem
     public double Price { get; set; }
     
     public Guid StoreId { get; set; }
-    public Store Store { get; set; }
+    public required Store Store { get; set; }
     public int FdcId { get; set; }
     public string Description { get; set; } = string.Empty;
     public string DataType { get; set; } = string.Empty;

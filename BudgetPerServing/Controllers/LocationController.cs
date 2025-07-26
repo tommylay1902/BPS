@@ -10,9 +10,10 @@ namespace BudgetPerServing.Controllers
     public class LocationController(ILocationService locationService) : ControllerBase
     {
         [HttpGet]
-        public async Task<ActionResult<List<Location>>> Get()
+        public async Task<ActionResult<List<Location>>> GetAllLocationsAsync()
         {
-            throw new NotImplementedException();
+            var locations = await  locationService.GetAllLocationsAsync();
+            return Ok(locations);
         }
 
         [HttpGet("{id:guid}")]

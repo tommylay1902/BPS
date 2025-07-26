@@ -1,3 +1,4 @@
+using BudgetPerServing.Data.Dto;
 using BudgetPerServing.Data.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -15,7 +16,7 @@ public class FoodSearchApiResponse
     public int TotalPages { get; set; }
     public List<int> PageList { get; set; } = new();
     public FoodSearchCriteria FoodSearchCriteria { get; set; } = new();
-    public List<FoodItem> Foods { get; set; } = new();
+    public List<FoodItemApiResponse> Foods { get; set; } = new();
     public Aggregations Aggregations { get; set; } = new();
 }
 
