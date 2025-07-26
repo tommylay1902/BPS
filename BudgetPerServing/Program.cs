@@ -1,5 +1,5 @@
 using BudgetPerServing.Clients;
-using BudgetPerServing.DAO;
+using BudgetPerServing.Dao;
 using BudgetPerServing.Data;
 using BudgetPerServing.Services;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +20,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(optionsBuilder =>
 // add service layer services
 builder.Services.AddScoped<IFoodItemService, FoodItemService>();
 builder.Services.AddScoped<ILocationService, LocationService>();
+builder.Services.AddScoped<IStoreService, StoreService>();
 
 builder.Services.AddScoped<IFdcClient, FdcClient>();
 builder.Services.AddHttpClient<IFdcClient, FdcClient>(client =>
@@ -29,6 +30,7 @@ builder.Services.AddHttpClient<IFdcClient, FdcClient>(client =>
 // add dao layer services
 builder.Services.AddScoped<IFoodItemDao, FoodItemDao>(); 
 builder.Services.AddScoped<ILocationDao, LocationDao>();
+builder.Services.AddScoped<IStoreDao, StoreDao>();
 
 //add logging for docker containers
 builder.Logging.ClearProviders();

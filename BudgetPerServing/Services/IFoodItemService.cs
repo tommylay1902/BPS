@@ -1,7 +1,6 @@
-using BudgetPerServing.DAO;
-using BudgetPerServing.Data;
+using BudgetPerServing.Dao;
 using BudgetPerServing.Data.Models;
-using Microsoft.EntityFrameworkCore;
+
 
 namespace BudgetPerServing.Services;
 

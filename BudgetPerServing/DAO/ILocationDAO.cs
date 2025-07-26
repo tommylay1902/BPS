@@ -2,7 +2,7 @@ using BudgetPerServing.Data;
 using BudgetPerServing.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace BudgetPerServing.DAO;
+namespace BudgetPerServing.Dao;
 
 public class LocationDao (ApplicationDbContext context): ILocationDao
 {
