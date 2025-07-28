@@ -18,33 +18,80 @@ namespace BudgetPerServing.Controllers
         }*/
         
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<Store>> PostStoreAsync([FromBody] CreateStoreRequest store)
         {
-            logger.LogInformation(store.LocationId.ToString());
-            await storeService.CreateStoreAsync(store);
+            try
+            {
+                await storeService.CreateStoreAsync(store);
+                return Ok(store);
+            }
+            catch (Exception ex)
+            {
+                return Problem(
+                    detail: "An unexpected error occurred while processing your request.",
+                    title: "Internal Server Error",
+                    statusCode: StatusCodes.Status500InternalServerError,
+                    instance: HttpContext.TraceIdentifier
+                );
+            }
 
-            return Ok(store);
         }
 
         [HttpGet]
-        public async Task<ActionResult<IList<Store>>> GetStoreAsync([FromQuery] int storeId)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<IList<Store>>> GetStoreAsync()
         {
-            var stores = await storeService.GetAllStoresAsync();
+            try
+            {
+                var stores = await storeService.GetAllStoresAsync();
 
-            return Ok(stores);
+                return Ok(stores);
+            }
+            catch (Exception ex)
+            {
+                return Problem(
+                    detail: "An unexpected error occurred while processing your request.",
+                    title: "Internal Server Error",
+                    statusCode: StatusCodes.Status500InternalServerError,
+                    instance: HttpContext.TraceIdentifier
+                );
+            }
+      
         }
 
         [HttpGet("{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<Store>> GetStoreByIdAsync(Guid id)
         {
-            var store = await storeService.GetStoreByIdAsync(id);
-
-            if (store == null)
+            try
             {
-                return NotFound();
-            }
+                var store = await storeService.GetStoreByIdAsync(id);
 
-            return Ok(store);
+                if (store == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(store);
+            }
+            catch (Exception ex)
+            {
+                return Problem(
+                    detail: "An unexpected error occurred while processing your request.",
+                    title: "Internal Server Error",
+                    statusCode: StatusCodes.Status500InternalServerError,
+                    instance: HttpContext.TraceIdentifier
+                );
+            }
+  
         }
 
     }
