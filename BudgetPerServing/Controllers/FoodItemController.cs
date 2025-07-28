@@ -10,7 +10,7 @@ namespace BudgetPerServing.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FoodItemController( IFdcClient fdcClient, ILogger<FoodItemController> logger, IFoodItemService fiService) : ControllerBase
+    public class FoodItemController(IFdcClient fdcClient, ILogger<FoodItemController> logger, IFoodItemService fiService) : ControllerBase
     {
      
         // GET: api/FoodItem
@@ -22,20 +22,61 @@ namespace BudgetPerServing.Controllers
         }*/
 
         [HttpGet("search")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FoodSearchApiResponse))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ProblemDetails))]
         public async Task<ActionResult<FoodSearchApiResponse>> SearchFoodsAsync()
         {
-            var query = HttpContext.Request.Query["query"].ToString();
-            var response = await fdcClient.SearchFoodsAsync(query);
-            return Ok(response);
+            try
+            {
+                var query = HttpContext.Request.Query["query"].ToString();
+                var response = await fdcClient.SearchFoodsAsync(query);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return Problem(
+                    detail: "An unexpected error occurred while processing your request.",
+                    title: "Internal Server Error",
+                    statusCode: StatusCodes.Status500InternalServerError,
+                    instance: HttpContext.TraceIdentifier
+                );
+
+            }
+         
         }
         
         // GET: api/FoodItem/5
         [HttpGet("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FoodSearchApiResponse))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ProblemDetails))]
         public async Task<ActionResult<FoodGetByIdApiResponse>> GetFoodItem(int id)
         {
-            var response = await fdcClient.GetFoodByIdAsync(id);
+            try
+            {
+                var response = await fdcClient.GetFoodByIdAsync(id);
 
-            return Ok(response);
+                if (response == null)
+                {
+                    return Problem(
+                        detail: $"Food Item with ID {id} was not found.",
+                        title: "Food Item not found",
+                        statusCode: StatusCodes.Status404NotFound,
+                        instance: HttpContext.TraceIdentifier
+                    );
+                }
+
+                return Ok(response);
+            }
+            catch(Exception ex)
+            {
+                return Problem(
+                    detail: "An unexpected error occurred while processing your request.",
+                    title: "Internal Server Error",
+                    statusCode: StatusCodes.Status500InternalServerError,
+                    instance: HttpContext.TraceIdentifier
+                );
+            }
+          
         }
         
         // POST: api/FoodItem

@@ -1,14 +1,61 @@
+using System.Diagnostics;
 using BudgetPerServing.Clients;
 using BudgetPerServing.Dao;
 using BudgetPerServing.Data;
 using BudgetPerServing.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.Configure<RouteHandlerOptions>(options =>
+{
+    options.ThrowOnBadRequest = true;
+});
+
 var foodApiKey = builder.Configuration["FoodApi:FoodApiKey"];
 
+builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var problemDetails = new ValidationProblemDetails(context.ModelState)
+        {
+            Status = StatusCodes.Status400BadRequest,
+            Title = "One or more validation errors occurred."
+        };
+        return new BadRequestObjectResult(problemDetails);
+    };
+});
 
-builder.Services.AddControllers();
+builder.Services.AddProblemDetails(
+    options => options.CustomizeProblemDetails = (context) => {
+        var httpContext = context.HttpContext;
+        context.ProblemDetails.Extensions["traceId"] = Activity.Current?.Id ?? httpContext.TraceIdentifier;
+        context.ProblemDetails.Extensions["supportContact"] = "bps.support@example.com";
+        
+        if (context.ProblemDetails.Status == StatusCodes.Status401Unauthorized)
+        {
+            context.ProblemDetails.Title = "UnauthorizedAccess";
+            context.ProblemDetails.Detail = "You are not authorized to access this resource.";
+        }
+        else if (context.ProblemDetails.Status == StatusCodes.Status400BadRequest)
+        {
+            context.ProblemDetails.Title = "BadRequest";
+            context.ProblemDetails.Detail = "Your request contains invalid data please double check your parameters and body.";
+        }
+        else if (context.ProblemDetails.Status == StatusCodes.Status404NotFound)
+        {
+            context.ProblemDetails.Title = "Resource Not Found";
+            context.ProblemDetails.Detail = "The resource you are looking for was not found.";
+        }
+        else
+        {
+            context.ProblemDetails.Title = "An unexpected error occurred";
+            context.ProblemDetails.Detail = "An unexpected error occurred. Please try again later.";
+        }
+
+    }
+);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 ;
 
@@ -36,6 +83,8 @@ builder.Services.AddScoped<IStoreDao, StoreDao>();
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 var app = builder.Build();
+app.UseExceptionHandler();
+app.UseStatusCodePages();
 
 var logger = app.Logger;
 

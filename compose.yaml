@@ -15,7 +15,7 @@
     image: postgres:16
     container_name: budget_per_serving_db
     ports:
-      - "5000:5432"
+      - "5001:5432"
     environment:
       POSTGRES_USER: budget_user
       POSTGRES_PASSWORD: budget_pass
