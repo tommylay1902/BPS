@@ -1,4 +1,5 @@
 using BudgetPerServing.Data;
+using BudgetPerServing.Data.Dto.Location;
 using BudgetPerServing.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,11 +7,12 @@ namespace BudgetPerServing.Dao;
 
 public class LocationDao (ApplicationDbContext context): ILocationDao
 {
-    public async Task CreateLocationAsync(Location location)
+    public async Task<Guid> CreateLocationAsync(Location location)
     {
         await context.Locations.AddAsync(location);
         
         await context.SaveChangesAsync();
+        return location.Id;
     }
 
     public async Task<Location?> GetLocationByIdAsync(Guid id)
@@ -23,11 +25,32 @@ public class LocationDao (ApplicationDbContext context): ILocationDao
     {
         return  await context.Locations.ToListAsync();
     }
+
+    public async Task UpdateLocationAsync(Location location)
+    {
+        context.Locations.Update(location);
+        await context.SaveChangesAsync();
+    }
+
+    public Task DeleteLocationAsync(Location location)
+    {
+        context.Locations.Remove(location);
+        return context.SaveChangesAsync();
+
+    }
+
+    public async Task<bool> CheckIfLocationExistsAsync(Guid id)
+    {
+        return await context.Locations.AnyAsync(l => l.Id == id);
+    }
 }
 
 public interface ILocationDao
 {
-    Task CreateLocationAsync(Location location);
+    Task<Guid> CreateLocationAsync(Location location);
     Task<Location?> GetLocationByIdAsync(Guid id);
     Task<IList<Location>?> GetAllLocationsAsync();
+    Task UpdateLocationAsync(Location location);
+    Task DeleteLocationAsync(Location location);
+    Task<bool> CheckIfLocationExistsAsync(Guid id);
 }
