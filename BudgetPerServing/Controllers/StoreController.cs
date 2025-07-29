@@ -52,7 +52,7 @@ namespace BudgetPerServing.Controllers
             {
                 var createdStoreId = await storeService.CreateStoreAsync(store);
                 logger.LogInformation(createdStoreId + "");
-                return CreatedAtAction("GetStoreById", new { id = createdStoreId }, store);
+                return CreatedAtAction("GetStoreById", new { id = createdStoreId }, new Store{Name=store.Name, LocationId = store.LocationId, Id =  createdStoreId});
             }
             catch (ResourceConflictException ex)
             {
@@ -187,6 +187,8 @@ namespace BudgetPerServing.Controllers
                 );
             }
         }
+
+  
 
     }
 }

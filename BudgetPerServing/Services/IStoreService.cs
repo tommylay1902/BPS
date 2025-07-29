@@ -58,33 +58,32 @@ public class StoreService(IStoreDao storeDao, ILocationDao locationDao) : IStore
         var store = await storeDao.GetStoreByIdAsync(id);
         
         if(store == null) throw new KeyNotFoundException($"Store with ID {id} not found");
-
-        var validNameUpdate = true;
-        var validLocationIdUpdate = true;
         
-        if (store.Name == request.Name || request.Name == null || request.Name.Trim() == "")
-        {
-            validNameUpdate = false;
-        }
-
-        if (request.LocationId == store.LocationId || request.LocationId is null)
-        {
-            validLocationIdUpdate = false;
-        }
-
-        if (validLocationIdUpdate  && request.LocationId.HasValue && await storeDao.StoreWithLocationIdExists(request.LocationId.Value))
+        var hasUpdates = false;
+        
+        if ( request.LocationId.HasValue && await storeDao.StoreWithLocationIdExists(request.LocationId.Value))
         {
             throw new ResourceConflictException($"Location with ID {request.LocationId} already exists"){ResourceType = nameof(Store), ResourceId = store.LocationId};
         }
 
+        if (request.Name != null && request.Name != store.Name && request.Name.Trim() != "")
+        {
+            store.Name = request.Name;
+            hasUpdates = true;
 
-        if (!validNameUpdate && !validLocationIdUpdate)
+        }
+
+        if (request.LocationId.HasValue)
+        {
+            store.LocationId = request.LocationId.Value;
+            hasUpdates = true;
+        }
+           
+        
+        if (!hasUpdates)
             throw new NoUpdateException("No update found on store request object")
                 { ResourceType = nameof(Store), ResourceId = store.Id };
-        if(validNameUpdate && request.Name != null)
-            store.Name = request.Name;
-        if(validLocationIdUpdate && request.LocationId.HasValue)
-            store.LocationId = request.LocationId.Value;
+    
         
         await storeDao.UpdateStoreAsync(store);
     }
