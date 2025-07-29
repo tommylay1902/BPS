@@ -115,6 +115,16 @@ namespace BudgetPerServing.Controllers
                 await storeService.UpdateStoreAsync(id, request);
                 return NoContent();
             }
+            catch (ResourceConflictException ex)
+            {
+                logger.LogWarning("hit the resource conflict");
+                return Problem(
+                    detail: ex.Message,
+                    title:"Resource Conflict",
+                    statusCode: StatusCodes.Status409Conflict,
+                    instance: HttpContext.TraceIdentifier
+                );
+            }
             catch (KeyNotFoundException ex)
             {
                 return Problem(
@@ -160,7 +170,7 @@ namespace BudgetPerServing.Controllers
             catch (KeyNotFoundException ex)
             {
                 return Problem(
-                    detail: $"Store with ID {id} was not found.",
+                    detail: ex.Message,
                     title: "Store not found. Can't Delete",
                     statusCode: StatusCodes.Status404NotFound,
                     instance: HttpContext.TraceIdentifier

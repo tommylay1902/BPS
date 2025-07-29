@@ -1,3 +1,6 @@
-namespace BudgetPerServing.Data.Dto;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
-public record StoreUpdateRequest(string Name);
+namespace BudgetPerServing.Data.Dto;
+[JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy))]
+public record StoreUpdateRequest(string? Name, Guid? LocationId);
