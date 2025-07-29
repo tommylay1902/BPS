@@ -14,6 +14,7 @@ public interface IStoreService
     public Task<IList<Store>> GetAllStoresAsync();
     public Task<Store?> GetStoreByIdAsync(Guid id);
     public Task UpdateStoreAsync(Guid id, StoreUpdateRequest request);
+    public Task DeleteStoreAsync(Guid id);
 }
 
 public class StoreService(IStoreDao storeDao, ILocationDao locationDao) : IStoreService
@@ -26,11 +27,18 @@ public class StoreService(IStoreDao storeDao, ILocationDao locationDao) : IStore
             throw new KeyNotFoundException($"Location with ID {request.LocationId} not found");
         }
 
+        if (await storeDao.StoreWithLocationIdExists(request.LocationId))
+        {
+            throw new ResourceConflictException($"Location with ID {request.LocationId} already exists" ){
+                ResourceType = nameof(Store),
+                ResourceId = location.Id,
+            };
+        }
+
         var store = new Store
         {
             LocationId = request.LocationId,
             Name = request.Name
-
         };
         return await storeDao.CreateStoreAsync(store);
     }
@@ -63,5 +71,14 @@ public class StoreService(IStoreDao storeDao, ILocationDao locationDao) : IStore
         store.Name = request.Name;
         
         await storeDao.UpdateStoreAsync(store);
+    }
+
+    public async Task DeleteStoreAsync(Guid id)
+    {
+        var store = await storeDao.GetStoreByIdAsync(id);
+        
+        if(store == null) throw new KeyNotFoundException($"Store with ID {id} not found");
+        
+        await storeDao.DeleteStoreAsync(store);
     }
 }

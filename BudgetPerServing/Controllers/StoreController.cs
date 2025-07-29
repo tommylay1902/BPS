@@ -9,7 +9,7 @@ namespace BudgetPerServing.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StoreController(IStoreService storeService, ILogger<StoreController> logger) : ControllerBase
+    public class StoreController(IStoreService storeService, ILogger<StoreController> logger, IWebHostEnvironment env) : ControllerBase
     {
         
         [HttpGet("{id:guid}")]
@@ -51,10 +51,24 @@ namespace BudgetPerServing.Controllers
             try
             {
                 var createdStoreId = await storeService.CreateStoreAsync(store);
-                return CreatedAtAction("GetStoreById", createdStoreId, store);
+                logger.LogInformation(createdStoreId + "");
+                return CreatedAtAction("GetStoreById", new { id = createdStoreId }, store);
+            }
+            catch (ResourceConflictException ex)
+            {
+                return Problem(
+                    detail: ex.Message,
+                    title:"Resource Conflict",
+                    statusCode: StatusCodes.Status409Conflict,
+                    instance: HttpContext.TraceIdentifier
+                );
             }
             catch (Exception ex)
             {
+                if (env.IsDevelopment())
+                {
+                    logger.LogError(ex.Message);
+                }
                 return Problem(
                     detail: "An unexpected error occurred while processing your request.",
                     title: "Internal Server Error",
@@ -122,6 +136,39 @@ namespace BudgetPerServing.Controllers
             catch (Exception ex)
             {
                
+                return Problem(
+                    detail: "An unexpected error occurred while processing your request.",
+                    title: "Internal Server Error",
+                    statusCode: StatusCodes.Status500InternalServerError,
+                    instance: HttpContext.TraceIdentifier
+                );
+            }
+        }
+
+        [HttpDelete("{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> DeleteStore(Guid id)
+        {
+            try
+            {
+                await storeService.DeleteStoreAsync(id);
+                return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return Problem(
+                    detail: $"Store with ID {id} was not found.",
+                    title: "Store not found. Can't Delete",
+                    statusCode: StatusCodes.Status404NotFound,
+                    instance: HttpContext.TraceIdentifier
+                );
+            }
+            catch (Exception ex)
+            {
+                
                 return Problem(
                     detail: "An unexpected error occurred while processing your request.",
                     title: "Internal Server Error",
