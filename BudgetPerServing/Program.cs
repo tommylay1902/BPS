@@ -33,25 +33,28 @@ builder.Services.AddProblemDetails(
         context.ProblemDetails.Extensions["traceId"] = Activity.Current?.Id ?? httpContext.TraceIdentifier;
         context.ProblemDetails.Extensions["supportContact"] = "bps.support@example.com";
         
-        if (context.ProblemDetails.Status == StatusCodes.Status401Unauthorized)
+        switch (context.ProblemDetails.Status)
         {
-            context.ProblemDetails.Title = "UnauthorizedAccess";
-            context.ProblemDetails.Detail = "You are not authorized to access this resource.";
-        }
-        else if (context.ProblemDetails.Status == StatusCodes.Status400BadRequest)
-        {
-            context.ProblemDetails.Title = "BadRequest";
-            context.ProblemDetails.Detail = "Your request contains invalid data please double check your parameters and body.";
-        }
-        else if (context.ProblemDetails.Status == StatusCodes.Status404NotFound)
-        {
-            context.ProblemDetails.Title = "Resource Not Found";
-            context.ProblemDetails.Detail = "The resource you are looking for was not found.";
-        }
-        else
-        {
-            context.ProblemDetails.Title = "An unexpected error occurred";
-            context.ProblemDetails.Detail = "An unexpected error occurred. Please try again later.";
+            case StatusCodes.Status401Unauthorized:
+                context.ProblemDetails.Title = "UnauthorizedAccess";
+                context.ProblemDetails.Detail = "You are not authorized to access this resource.";
+                break;
+            case StatusCodes.Status400BadRequest:
+                context.ProblemDetails.Title = "BadRequest";
+                context.ProblemDetails.Detail = context.ProblemDetails.Detail;
+                break;
+            case StatusCodes.Status404NotFound:
+                context.ProblemDetails.Title = "Resource Not Found";
+                context.ProblemDetails.Detail = "The resource you are looking for was not found.";
+                break;
+            case StatusCodes.Status409Conflict:
+                context.ProblemDetails.Title = "Conflict";
+                context.ProblemDetails.Detail = "The resource has a conflict";
+                break;
+            default:
+                context.ProblemDetails.Title = "An unexpected error occurred";
+                context.ProblemDetails.Detail = "An unexpected error occurred. Please try again later.";
+                break;
         }
 
     }
