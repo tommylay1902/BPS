@@ -87,7 +87,7 @@ namespace BudgetPerServing.Controllers
         {
             try
             {
-                var stores = await storeService.GetAllStoresAsync();
+                var stores = await storeService.GetAllStoresWithLocationEagerLoadAsync();
 
                 return Ok(stores);
             }

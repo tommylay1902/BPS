@@ -10,7 +10,6 @@ const columns: ColumnDef<Store>[] = [
   {
     header: "Location",
     cell: (cell) => {
-      console.table(cell.row.original.location?.country);
       const location = cell.row.original.location;
 
       return location

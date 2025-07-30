@@ -1,5 +1,5 @@
 import React from "react";
-import AddStore from "./form/store/add-store";
+import AddStore from "./add-store";
 
 const TableActions = () => {
   return <AddStore />;

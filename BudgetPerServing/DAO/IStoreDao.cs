@@ -9,6 +9,8 @@ public interface IStoreDao
 {
     public Task<Guid> CreateStoreAsync(Store store);
     public Task<IList<Store>> GetAllStoresAsync();
+    public Task<IList<Store>> GetAllStoresWithLocationEagerLoadAsync();
+
     public Task<Store?> GetStoreByIdAsync(Guid id);
     public Task UpdateStoreAsync(Store store);
     public Task DeleteStoreAsync(Store store);
@@ -30,8 +32,13 @@ public class StoreDao(ApplicationDbContext context) : IStoreDao
         // .Include() to include location object reference
        return await context.Stores.ToListAsync();
     }
-    
-    
+
+    public async Task<IList<Store>> GetAllStoresWithLocationEagerLoadAsync()
+    {
+        return await context.Stores.Include(s => s.Location).ToListAsync();
+    }
+
+
     public async Task<Store?> GetStoreByIdAsync(Guid id)
     {
         return await context.Stores.FindAsync(id);

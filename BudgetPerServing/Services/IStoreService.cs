@@ -12,6 +12,7 @@ public interface IStoreService
 {
     public Task<Guid> CreateStoreAsync(CreateStoreRequest store);
     public Task<IList<Store>> GetAllStoresAsync();
+    public Task<IList<Store>> GetAllStoresWithLocationEagerLoadAsync();
     public Task<Store?> GetStoreByIdAsync(Guid id);
     public Task UpdateStoreAsync(Guid id, StoreUpdateRequest request);
     public Task DeleteStoreAsync(Guid id);
@@ -46,6 +47,11 @@ public class StoreService(IStoreDao storeDao, ILocationDao locationDao) : IStore
     public Task<IList<Store>> GetAllStoresAsync()
     {
         return storeDao.GetAllStoresAsync();
+    }
+
+    public Task<IList<Store>> GetAllStoresWithLocationEagerLoadAsync()
+    {
+        return storeDao.GetAllStoresWithLocationEagerLoadAsync();
     }
 
     public async Task<Store?> GetStoreByIdAsync(Guid id)

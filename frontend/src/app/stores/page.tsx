@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Store } from "./_types/store";
 import { DataTable } from "@/components/ui/data-table";
-import columns from "@/components/data-table/store/columns";
-import TableActions from "@/components/store-crud";
+import columns from "@/app/stores/_components/columns";
+import TableActions from "@/app/stores/_components/store-crud";
 
 const Page: React.FC = async () => {
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
