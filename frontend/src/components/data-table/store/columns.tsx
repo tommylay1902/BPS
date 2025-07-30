@@ -8,8 +8,15 @@ const columns: ColumnDef<Store>[] = [
     header: "Name",
   },
   {
-    accessorKey: "locationId",
-    header: "Location Id",
+    header: "Location",
+    cell: (cell) => {
+      console.table(cell.row.original.location?.country);
+      const location = cell.row.original.location;
+
+      return location
+        ? `${location?.city}, ${location?.street}, ${location?.suite}, ${location?.zipCode}`
+        : "";
+    },
   },
 ];
 
