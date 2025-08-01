@@ -76,6 +76,41 @@ namespace BudgetPerServing.Controllers
                     instance: HttpContext.TraceIdentifier
                 );
             }
+        }
+        
+        [HttpPost("with-location")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<Store>> PostStoreWithLocation([FromBody] CreateStoreWithLocationRequest request)
+        {
+            try
+            {
+                var (createdStoreId, createdLocationId) = await storeService.CreateStoreWithLocation(request);
+                return CreatedAtAction("GetStoreById", new { id = createdStoreId }, new Store{Name=request.Name, LocationId = createdLocationId, Id =  createdStoreId});
+            }
+            catch (ResourceConflictException ex)
+            {
+                return Problem(
+                    detail: ex.Message,
+                    title:"Resource Conflict",
+                    statusCode: StatusCodes.Status409Conflict,
+                    instance: HttpContext.TraceIdentifier
+                );
+            }
+            catch (Exception ex)
+            {
+                if (env.IsDevelopment())
+                {
+                    logger.LogError(ex.Message);
+                }
+                return Problem(
+                    detail: "An unexpected error occurred while processing your request.",
+                    title: "Internal Server Error",
+                    statusCode: StatusCodes.Status500InternalServerError,
+                    instance: HttpContext.TraceIdentifier
+                );
+            }
 
         }
 

@@ -11,7 +11,7 @@ public class LocationDao (ApplicationDbContext context): ILocationDao
     {
         await context.Locations.AddAsync(location);
         
-        await context.SaveChangesAsync();
+        /*await context.SaveChangesAsync();*/
         return location.Id;
     }
 

@@ -1,6 +1,8 @@
 
 
+using System.Transactions;
 using BudgetPerServing.Dao;
+using BudgetPerServing.Data;
 using BudgetPerServing.Data.Dto;
 using BudgetPerServing.Data.Models;
 using BudgetPerServing.Exceptions;
@@ -11,14 +13,16 @@ namespace BudgetPerServing.Services;
 public interface IStoreService
 {
     public Task<Guid> CreateStoreAsync(CreateStoreRequest store);
+    public Task<(Guid storeId, Guid locationId)> CreateStoreWithLocation(CreateStoreWithLocationRequest request);
     public Task<IList<Store>> GetAllStoresAsync();
     public Task<IList<Store>> GetAllStoresWithLocationEagerLoadAsync();
     public Task<Store?> GetStoreByIdAsync(Guid id);
     public Task UpdateStoreAsync(Guid id, StoreUpdateRequest request);
     public Task DeleteStoreAsync(Guid id);
+    
 }
 
-public class StoreService(IStoreDao storeDao, ILocationDao locationDao) : IStoreService
+public class StoreService(IStoreDao storeDao, ILocationDao locationDao, IUnitOfWork unitOfWork) : IStoreService
 {
     public async Task<Guid> CreateStoreAsync(CreateStoreRequest request)
     {
@@ -43,6 +47,45 @@ public class StoreService(IStoreDao storeDao, ILocationDao locationDao) : IStore
         };
         return await storeDao.CreateStoreAsync(store);
     }
+
+    public async Task<(Guid storeId, Guid locationId)> CreateStoreWithLocation(CreateStoreWithLocationRequest request)
+    {
+        using var transaction = unitOfWork.BeginTransaction();
+        try
+        {
+            var location = new Location
+            {
+                Country = request.Location.Country,
+                City = request.Location.City,
+                State = request.Location.State,
+                Street = request.Location.Street,
+                Suite = request.Location.Suite,
+                ZipCode = request.Location.ZipCode
+            };
+            
+            var locationId = await locationDao.CreateLocationAsync(location);
+
+            var store = new Store
+            {
+                Name = request.Name,
+                LocationId = locationId
+            };
+                
+            var storeId = await  storeDao.CreateStoreAsync(store);
+
+            await unitOfWork.SaveChangesAsync();
+
+            transaction.Commit();
+
+            return (storeId, locationId);
+        }
+        catch (Exception ex)
+        {
+            transaction.Rollback();
+            throw new Exception(ex.Message);
+        }
+    }
+    
 
     public Task<IList<Store>> GetAllStoresAsync()
     {

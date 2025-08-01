@@ -1,5 +1,6 @@
 "use client";
 import { Store } from "@/app/stores/_types/store";
+import { buildFullAddress } from "@/lib/buildFullAddress";
 import { ColumnDef } from "@tanstack/react-table";
 
 const columns: ColumnDef<Store>[] = [
@@ -12,9 +13,7 @@ const columns: ColumnDef<Store>[] = [
     cell: (cell) => {
       const location = cell.row.original.location;
 
-      return location
-        ? `${location?.city}, ${location?.street}, ${location?.suite}, ${location?.zipCode}`
-        : "";
+      return location ? buildFullAddress(location) : "";
     },
   },
 ];

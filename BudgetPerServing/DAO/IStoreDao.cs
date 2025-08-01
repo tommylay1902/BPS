@@ -8,6 +8,7 @@ namespace BudgetPerServing.Dao;
 public interface IStoreDao
 {
     public Task<Guid> CreateStoreAsync(Store store);
+
     public Task<IList<Store>> GetAllStoresAsync();
     public Task<IList<Store>> GetAllStoresWithLocationEagerLoadAsync();
 
@@ -22,7 +23,7 @@ public class StoreDao(ApplicationDbContext context) : IStoreDao
     public async Task<Guid> CreateStoreAsync(Store store)
     {
         await context.AddAsync(store);
-        await context.SaveChangesAsync();
+        /*await context.SaveChangesAsync();*/
 
         return store.Id;
     }

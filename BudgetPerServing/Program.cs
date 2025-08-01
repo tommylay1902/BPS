@@ -13,7 +13,7 @@ builder.Services.Configure<RouteHandlerOptions>(options =>
 });
 
 var foodApiKey = builder.Configuration["FoodApi:FoodApiKey"];
-
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
 {
     options.InvalidModelStateResponseFactory = context =>
