@@ -152,7 +152,6 @@ namespace BudgetPerServing.Controllers
             }
             catch (ResourceConflictException ex)
             {
-                logger.LogWarning("hit the resource conflict");
                 return Problem(
                     detail: ex.Message,
                     title:"Resource Conflict",
@@ -180,7 +179,6 @@ namespace BudgetPerServing.Controllers
             }
             catch (Exception ex)
             {
-               
                 return Problem(
                     detail: "An unexpected error occurred while processing your request.",
                     title: "Internal Server Error",
