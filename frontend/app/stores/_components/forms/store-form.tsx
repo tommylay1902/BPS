@@ -15,12 +15,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { storeConfig } from "../../_types/form-config/schemas/store-config";
+import { toast } from "sonner";
+import { Store } from "../../_types/store";
+import { useStores } from "../../_context/stores-context";
 interface StoreFormProps {
   handleCloseDialog: (state: boolean) => void;
 }
 const StoreForm: React.FC<StoreFormProps> = ({ handleCloseDialog }) => {
   async function createStoreWithLocation(values: z.infer<typeof storeSchema>) {
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
     try {
       const response = await fetch(baseUrl + "/api/Store/with-location", {
         method: "POST",
@@ -31,12 +35,18 @@ const StoreForm: React.FC<StoreFormProps> = ({ handleCloseDialog }) => {
       });
 
       if (response.status == 201) {
+        toast.success("Success", {
+          description: "Store has been succesfully created and saved",
+        });
+        addStore(await response.json());
         handleCloseDialog(false);
       }
     } catch (e) {
       console.error(e);
     }
   }
+
+  const { addStore } = useStores();
   const form = useForm<z.infer<typeof storeSchema>>({
     resolver: zodResolver(storeSchema),
     defaultValues: {

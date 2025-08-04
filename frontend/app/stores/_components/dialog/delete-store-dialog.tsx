@@ -9,6 +9,8 @@ import {
 } from "@/components/ui/dialog";
 import { Store } from "../../_types/store";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { useStores } from "../../_context/stores-context";
 
 interface DeleteStoreDialogProps {
   openState: boolean;
@@ -31,17 +33,26 @@ const DeleteStoreDialog: React.FC<DeleteStoreDialogProps> = ({
     handleDeleteStoreDialogState(newOpen);
   };
 
+  const { removeStore } = useStores();
+
   const deleteStores = async () => {
     try {
-      const idList = stores.map((store) => store.id).join(",");
-      const encodedIds = encodeURIComponent(idList);
+      const idList = stores.map((store) => store.id);
+      const encodedIds = encodeURIComponent(idList.join(","));
 
-      await fetch(
+      const response = await fetch(
         process.env.NEXT_PUBLIC_API_BASE_URL + "/api/Store?ids=" + encodedIds,
         {
           method: "DELETE",
         },
       );
+      if (response.status === 204) {
+        toast.success("Success", {
+          description: "Store(s) have been succesfully deleted",
+        });
+        removeStore(idList);
+        handleDeleteStoreDialogState(false);
+      }
     } catch (e) {
       console.error(e);
     }

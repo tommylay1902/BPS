@@ -9,6 +9,9 @@ import {
 import { useState, useEffect } from "react";
 
 import StoreForm from "../forms/store-form";
+import { toast } from "sonner";
+import { Store } from "../../_types/store";
+import { useStores } from "../../_context/stores-context";
 
 interface CreateStoreDialogProps {
   openState: boolean;
@@ -26,6 +29,7 @@ const CreateStoreDialog: React.FC<CreateStoreDialogProps> = ({
     setOpen(newOpen);
     handleCreateStoreDialogOpen(newOpen);
   };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
