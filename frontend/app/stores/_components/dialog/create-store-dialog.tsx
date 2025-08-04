@@ -1,15 +1,39 @@
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+"use client";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { useState, useEffect } from "react";
+
 import StoreForm from "../forms/store-form";
 
-const CreateStoreDialog = () => {
+interface CreateStoreDialogProps {
+  openState: boolean;
+  handleCreateStoreDialogState: (state: boolean) => void;
+}
+const CreateStoreDialog: React.FC<CreateStoreDialogProps> = ({
+  openState,
+  handleCreateStoreDialogState: handleCreateStoreDialogOpen,
+}) => {
+  const [open, setOpen] = useState(openState);
+  useEffect(() => {
+    setOpen(openState);
+  }, [openState]);
+  const onOpenChange = (newOpen: boolean) => {
+    setOpen(newOpen);
+    handleCreateStoreDialogOpen(newOpen);
+  };
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="outline">Add Store</Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
-        <StoreForm />
+        <DialogHeader>
+          <DialogTitle>Add Store</DialogTitle>
+          <DialogDescription>Add Store Info Here</DialogDescription>
+        </DialogHeader>
+        <StoreForm handleCloseDialog={handleCreateStoreDialogOpen} />
       </DialogContent>
     </Dialog>
   );

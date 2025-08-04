@@ -7,6 +7,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy  =>
+        {
+            policy.WithOrigins("http://localhost:3000")
+                .AllowAnyHeader()  
+                .AllowAnyMethod()  
+                .AllowCredentials(); 
+        });
+});
 builder.Services.Configure<RouteHandlerOptions>(options =>
 {
     options.ThrowOnBadRequest = true;
@@ -86,8 +97,10 @@ builder.Services.AddScoped<IStoreDao, StoreDao>();
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 var app = builder.Build();
+app.UseCors();
 app.UseExceptionHandler();
 app.UseStatusCodePages();
+
 
 var logger = app.Logger;
 

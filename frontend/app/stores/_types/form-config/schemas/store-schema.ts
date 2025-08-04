@@ -1,24 +1,24 @@
 import z from "zod";
 export const storeSchema = z.object({
   name: z.string().min(1, {
-    message: "store name is required!",
+    message: "Store name is required!",
   }),
   location: z.object({
     country: z.string().min(1, {
-      message: "country is required!",
+      message: "Country is required!",
     }),
     city: z.string().min(1, {
-      message: "city is required!",
+      message: "City is required!",
     }),
     state: z.string().min(1, {
-      message: "state is required!",
+      message: "State is required!",
     }),
     street: z.string().min(1, {
-      message: "street is required!",
+      message: "Street is required!",
     }),
     suite: z.string().nullable(),
     zipCode: z.string().min(1, {
-      message: "zipCode is required!",
+      message: "ZipCode is required!",
     }),
   }),
 });
