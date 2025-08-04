@@ -19,6 +19,7 @@ public interface IStoreService
     public Task<Store?> GetStoreByIdAsync(Guid id);
     public Task UpdateStoreAsync(Guid id, StoreUpdateRequest request);
     public Task DeleteStoreAsync(Guid id);
+    public Task BatchDeleteStoreAsync(IList<Guid> ids);
     
 }
 
@@ -144,5 +145,26 @@ public class StoreService(IStoreDao storeDao, ILocationDao locationDao, IUnitOfW
         if(store == null) throw new KeyNotFoundException($"Store with ID {id} not found");
         
         await storeDao.DeleteStoreAsync(store);
+    }
+
+    public async Task BatchDeleteStoreAsync(IList<Guid> ids)
+    {
+        using var transaction = unitOfWork.BeginTransaction();
+        try
+        {
+            var rowsModified = await storeDao.BatchDeleteStoreAsync(ids);
+            if (rowsModified == 0) throw new KeyNotFoundException("None of the provided Ids exist in the database");
+            if (rowsModified != ids.Count)
+            {
+                throw new BadHttpRequestException("Not all items were deleted");
+            }
+            await unitOfWork.SaveChangesAsync();
+            transaction.Commit();
+        }
+        catch (Exception ex)
+        {
+            transaction.Rollback();
+            throw new Exception(ex.Message);
+        }
     }
 }

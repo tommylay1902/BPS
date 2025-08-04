@@ -15,6 +15,7 @@ interface DeleteStoreDialogProps {
   handleDeleteStoreDialogState: (state: boolean) => void;
   stores: Store[];
 }
+
 const DeleteStoreDialog: React.FC<DeleteStoreDialogProps> = ({
   openState,
   handleDeleteStoreDialogState,
@@ -37,6 +38,9 @@ const DeleteStoreDialog: React.FC<DeleteStoreDialogProps> = ({
 
       await fetch(
         process.env.NEXT_PUBLIC_API_BASE_URL + "/api/Store?ids=" + encodedIds,
+        {
+          method: "DELETE",
+        },
       );
     } catch (e) {
       console.error(e);
@@ -52,7 +56,7 @@ const DeleteStoreDialog: React.FC<DeleteStoreDialogProps> = ({
 
         {stores.map((store) => (
           <div key={store.id}>
-            <div className="font-bold">Store Name </div>
+            <div className="font-bold">Store Name</div>
             <div>{store.name}</div>
           </div>
         ))}

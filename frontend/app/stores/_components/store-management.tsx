@@ -5,6 +5,7 @@ import { columns } from "./table/columns";
 import EditDock from "@/components/edit-dock";
 import { Store } from "../_types/store";
 import { RowSelectionState } from "@tanstack/react-table";
+
 interface StoreManagementProps {
   data: Store[];
 }

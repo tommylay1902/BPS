@@ -30,7 +30,9 @@ export const EditDock: React.FC<EditDockProps> = ({ selectedStores }) => {
           <Button
             variant="destructive"
             onClick={() => {
-              setDeleteStoreDialogOpen(true);
+              if (selectedStores.length > 0) {
+                setDeleteStoreDialogOpen(true);
+              }
             }}
             className="peer/delete rounded-full cursor-pointer transition-all duration-300 hover:scale-110 group-hover/update:scale-90 [&_svg]:size-5"
           >

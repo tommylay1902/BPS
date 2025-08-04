@@ -2,7 +2,7 @@
 services:
   budgetperserving:
     build:
-      context: "/Users/tommylay/RiderProjects/BPS"
+      context: "/home/tommy/dev/projects/BPS"
       dockerfile: "BudgetPerServing/Dockerfile"
       target: "base"
     command: []
@@ -14,8 +14,8 @@ services:
     image: "budgetperserving:dev"
     ports: []
     volumes:
-    - "/Users/tommylay/RiderProjects/BPS/BudgetPerServing:/app:rw"
-    - "/Users/tommylay/RiderProjects/BPS:/src:rw"
-    - "/Users/tommylay/.microsoft/usersecrets:/home/app/.microsoft/usersecrets"
-    - "/Users/tommylay/.nuget/packages:/home/app/.nuget/packages"
+    - "/home/tommy/dev/projects/BPS/BudgetPerServing:/app:rw"
+    - "/home/tommy/dev/projects/BPS:/src:rw"
+    - "/home/tommy/.microsoft/usersecrets:/home/app/.microsoft/usersecrets"
+    - "/home/tommy/.nuget/packages:/home/app/.nuget/packages"
     working_dir: "/app"

@@ -187,9 +187,43 @@ namespace BudgetPerServing.Controllers
                 );
             }
         }
-
-        [HttpDelete("{id:guid}")]
+        
+        [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> BatchDeleteStore([FromQuery] string ids)
+        {
+            try
+            {
+                var idList = ids.Split(',').Select(Guid.Parse).ToList();
+                await storeService.BatchDeleteStoreAsync(idList);
+                return NoContent();
+            }
+            catch (FormatException ex)
+            {
+                return Problem(
+                    detail: ex.Message,
+                    title: "error parsing ids",
+                    statusCode: StatusCodes.Status400BadRequest,
+                    instance: HttpContext.TraceIdentifier
+                );
+            }
+            catch (Exception e)
+            {
+                return Problem(
+                    detail: "An unexpected error occurred while processing your request.",
+                    title: "Internal Server Error",
+                    statusCode: StatusCodes.Status500InternalServerError,
+                    instance: HttpContext.TraceIdentifier
+                );
+            }
+     
+        }
+        
+        [HttpDelete("{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

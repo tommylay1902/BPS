@@ -15,7 +15,9 @@ public interface IStoreDao
     public Task<Store?> GetStoreByIdAsync(Guid id);
     public Task UpdateStoreAsync(Store store);
     public Task DeleteStoreAsync(Store store);
+    public Task<int> BatchDeleteStoreAsync(IEnumerable<Guid> ids);
     public Task<bool> StoreWithLocationIdExists(Guid locationId);
+    
 }
 
 public class StoreDao(ApplicationDbContext context) : IStoreDao
@@ -55,6 +57,13 @@ public class StoreDao(ApplicationDbContext context) : IStoreDao
     {
         context.Stores.Remove(store);
         await context.SaveChangesAsync();
+    }
+
+    public async Task<int> BatchDeleteStoreAsync(IEnumerable<Guid> ids)
+    {
+        return await context.Stores
+            .Where(s => ids.Contains(s.Id))
+            .ExecuteDeleteAsync();
     }
 
     public async Task<bool> StoreWithLocationIdExists(Guid locationId)
